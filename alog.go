@@ -42,8 +42,13 @@ func New(w io.Writer) *Alog {
 // the caller from being blocked.
 func (al Alog) Start() {
 	for {
-		msg := <-al.msgCh
-		go al.write(msg, nil)
+		select {
+		case msg := <-al.msgCh:
+			go al.write(msg, nil)
+		case <-al.shutdownCh:
+			al.shutdown()
+		}
+
 	}
 
 }
@@ -68,6 +73,7 @@ func (al Alog) write(msg string, wg *sync.WaitGroup) {
 
 func (al Alog) shutdown() {
 	close(al.msgCh)
+	al.shutdownCh <- struct{}{}
 
 }
 
