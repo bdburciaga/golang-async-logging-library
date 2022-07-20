@@ -27,6 +27,8 @@ type Alog struct {
 func New(w io.Writer) *Alog {
 	msgCh := make(chan string)
 	errorCh := make(chan error)
+	fmt.Println(msgCh)
+	fmt.Println(errorCh)
 	if w == nil {
 		w = os.Stdout
 	}
@@ -38,9 +40,7 @@ func New(w io.Writer) *Alog {
 // Start begins the message loop for the asynchronous logger. It should be initiated as a goroutine to prevent
 // the caller from being blocked.
 func (al Alog) Start() {
-	for {
 
-	}
 }
 
 func (al Alog) formatMessage(msg string) string {
